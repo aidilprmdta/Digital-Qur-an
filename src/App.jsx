@@ -108,7 +108,7 @@ function App() {
     <div className="bg-[url('/bg3.jpeg')] bg-cover bg-center bg-no-repeat min-h-screen w-full flex pt-26">
       <header className="fixed top-0 left-0 w-full shadow-md z-50 p-8 border-b-5 border-purple-900">
         <div className="mx-auto flex justify-between items-center">
-          <h1 className="text-4xl font-bold text-purple-300">Dil-Qur'an</h1>
+          <h1 className="text-4xl font-bold text-purple-300">E-Qur'an</h1>
           <h2 className="text-4xl text-pink-500 font-semibold">
             {selectedSurah ? `Surah: ${dataSurah.find(surah => surah.nomor === selectedSurah)?.namaLatin}` : "Pilih Surah"}
           </h2>
