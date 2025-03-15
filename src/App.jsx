@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faBookmark, faBookOpen } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faBookmark, faBookOpen, faSearch } from '@fortawesome/free-solid-svg-icons'
 import './App.css'
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
   const [selectedQari, setSelectedQari] = useState("01")
   const ayatRefs = useRef({})
   const [tafsir, setTafsir] = useState(null);
+  const [search, setSearch] = useState("");
 
 
   useEffect(() => {
@@ -30,13 +31,14 @@ function App() {
       .then(data => {
         setAyat(data.data.ayat);
         setTafsir(data.data.tafsir); // Simpan tafsir ke state
-        setTimeout(() => {
-          scrollToAyat(window.location.hash.replace('#', ''));
-        }, 500);
+        console.log("Tafsir:", data.data.tafsir); // Debugging untuk cek apakah tafsir ada
       })
       .catch(error => console.error('Ayat Error:', error));
   };
-
+  
+  const filteredSurah = dataSurah.filter(surah => 
+    surah.namaLatin.toLowerCase().includes(search.toLowerCase())
+  )
 
   const scrollToAyat = (nomorAyat) => {
     if (ayatRefs.current[nomorAyat]) {
@@ -102,7 +104,7 @@ function App() {
     const arabicNumber = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
     return number.toString().split('').map((digit) => arabicNumber[digit]).join('')
   }
-
+  
   return (
     //layout utama
     <div className="bg-[url('/bg3.jpeg')] bg-cover bg-center bg-no-repeat min-h-screen w-full flex pt-26">
@@ -123,18 +125,38 @@ function App() {
       </header>
       {/* Sidebar/kiri ujung */}
       <div className="w-1/4 h-screen overflow-auto scrollbar-thin scrollbar-thumb-purple-700 scrollbar-track-purple-300 p-5 bg-opacity-50 flex flex-col">
-        {dataSurah.map((surah) => (
-          <div key={surah.nomor} className="bg-transparent hover:bg-purple-500 border p-2 m-2 cursor-pointer rounded-lg"
-            onClick={() => {
-              setSelectedSurah(surah.nomor)
-              fetchAyat(surah.nomor)
-            }}>
-            <p className="text-lg text-left"><span className="before:content-['\06DD']">{convertToArabicNumber(surah.nomor)}</span>{surah.namaLatin}</p>
-            <h2 className="text-lg text-black-600" id='artiTeks'>{surah.arti} - {surah.jumlahAyat} ayat - {surah.tempatTurun}</h2>
-            <button onClick={() => playAudio(surah.audio['05'])}></button>
+        {/* Tombol pencarian  */}
+        <div className="mb-4 flex items-center border p-2 rounded-lg bg-transparent">
+          <FontAwesomeIcon icon={faSearch} className="mr-2 text-purple-900" />
+            <input 
+              type="text" 
+              placeholder="Cari Surah..." 
+              className="w-full p-2 border-none outline-none" 
+              value={search} 
+              onChange={(e) => setSearch(e.target.value)}/>
           </div>
-        ))
-        }
+            {filteredSurah.map((surah) => (
+              <div key={surah.nomor} className="bg-transparent hover:bg-purple-500 border p-2 m-2 cursor-pointer rounded-lg"
+                onClick={() => {
+                  setSelectedSurah(surah.nomor);
+                  fetchAyat(surah.nomor);
+                  }}>                  
+                <p className="text-lg text-left">{surah.namaLatin}</p>
+                <h2 className="text-lg text-black-600">{surah.arti} - {surah.jumlahAyat} ayat - {surah.tempatTurun}</h2>
+              </div>
+                ))}
+                {/* data surah */}
+            {dataSurah.map((surah) => (
+              <div key={surah.nomor} className="bg-transparent hover:bg-purple-500 border p-2 m-2 cursor-pointer rounded-lg"
+                onClick={() => {
+                  setSelectedSurah(surah.nomor)
+                  fetchAyat(surah.nomor)
+            }}>
+                <p className="text-lg text-left"><span className="before:content-['\06DD']">{convertToArabicNumber(surah.nomor)}</span>{surah.namaLatin}</p>
+                <h2 className="text-lg text-black-600" id='artiTeks'>{surah.arti} - {surah.jumlahAyat} ayat - {surah.tempatTurun}</h2>
+              <button onClick={() => playAudio(surah.audio['05'])}></button>
+              </div>
+            ))}
       </div>
       {/* Dalam Bar/kanan ujung */}
       <div className="w-3/4 pt-15 h-screen overflow-auto  p-4">
@@ -187,6 +209,8 @@ function App() {
                       onClick={() => setBookmark([...bookmark, surah.nomorAyat])}><FontAwesomeIcon icon={faBookOpen} className="text-pink-400" cursor={"pointer"} />
                     </button>
                   </div>
+                      {/* Tambahkan Tafsir */}
+ 
                 </div>
               ))
             }
