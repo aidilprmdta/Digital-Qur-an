@@ -17,7 +17,6 @@ function App() {
   const [tafsir, setTafsir] = useState(null);
   const [search, setSearch] = useState("");
 
-
   useEffect(() => {
     fetch('https://equran.id/api/v2/surat')
       .then(res => res.json())
