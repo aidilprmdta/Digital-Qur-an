@@ -14,7 +14,6 @@ function App() {
   const [deskripsi, setDeskripsi] = useState([])
   const [selectedQari, setSelectedQari] = useState("01")
   const ayatRefs = useRef({})
-  const [tafsir, setTafsir] = useState(null);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -29,8 +28,6 @@ function App() {
       .then(res => res.json())
       .then(data => {
         setAyat(data.data.ayat);
-        setTafsir(data.data.tafsir); // Simpan tafsir ke state
-        console.log("Tafsir:", data.data.tafsir); // Debugging untuk cek apakah tafsir ada
       })
       .catch(error => console.error('Ayat Error:', error));
   };
@@ -52,10 +49,10 @@ function App() {
   }, [ayat]);
 
   useEffect(() => {
-    const savedBookmarks = JSON.parse(localStorage.getItem('bookmarkedAyat')) || [];
-    setBookmark(savedBookmarks);
+    localStorage.clear();
+    sessionStorage.clear();
   }, []);
-
+  
   useEffect(() => {
     if (selectedSurah && ayat.length > 0) {
       scrollToAyat(window.location.hash.replace('#', ''));
@@ -109,16 +106,11 @@ function App() {
     <div className="bg-[url('/bg3.jpeg')] bg-cover bg-center bg-no-repeat min-h-screen w-full flex pt-26">
       <header className="fixed top-0 left-0 w-full shadow-md z-50 p-8 border-b-5 border-purple-900">
         <div className="mx-auto flex justify-between items-center">
-          <h1 className="text-4xl font-bold text-purple-300">E-Qur'an</h1>
-          <h2 className="text-4xl text-pink-500 font-semibold">
-            {selectedSurah ? `Surah: ${dataSurah.find(surah => surah.nomor === selectedSurah)?.namaLatin}` : "Pilih Surah"}
+          <h1 className="text-4xl font-bold text-purple-800">E-Qur'an</h1>
+          <h2 className="text-4xl text-purple-600 font-semibold">
+            {selectedSurah ? `Surah: ${dataSurah.find(surah => surah.nomor === selectedSurah)?.namaLatin}` : "Select Surah"}
           </h2>
           <nav className="flex gap-5">
-            <button className="text-pink-600 text-2xl hover:text-purple-800 cursor-pointer">Doa</button>
-            <button className="text-pink-600 text-2xl hover:text-purple-800 cursor-pointer">About</button>
-            <button className="text-pink-600 text-2xl hover:text-purple-800 cursor-pointer">
-              <FontAwesomeIcon icon={faBookmark} />
-            </button>
           </nav>
         </div>
       </header>
@@ -129,7 +121,7 @@ function App() {
           <FontAwesomeIcon icon={faSearch} className="mr-2 text-purple-900" />
             <input 
               type="text" 
-              placeholder="Cari Surah..." 
+              placeholder="Search Surah..." 
               className="w-full p-2 border-none outline-none" 
               value={search} 
               onChange={(e) => setSearch(e.target.value)}/>
@@ -139,9 +131,14 @@ function App() {
                 onClick={() => {
                   setSelectedSurah(surah.nomor);
                   fetchAyat(surah.nomor);
-                  }}>                  
-                <p className="text-lg text-left">{surah.namaLatin}</p>
-                <h2 className="text-lg text-black-600">{surah.arti} - {surah.jumlahAyat} ayat - {surah.tempatTurun}</h2>
+                  }}>
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-3xl"><span className="before:content-['\06DD']">{convertToArabicNumber(surah.nomor)}</span></h1>                  
+                      <div>
+                      <p className="font-lora text-lg text-left" id='latin'>{surah.namaLatin}</p>
+                      <h2 className="text-lg text-black-600">{surah.arti} | {surah.jumlahAyat} Ayat</h2>
+                      </div>
+                </div>
               </div>
                 ))}
                 {/* data surah */}
@@ -152,21 +149,21 @@ function App() {
                   fetchAyat(surah.nomor)
             }}>
                 <p className="text-lg text-left"><span className="before:content-['\06DD']">{convertToArabicNumber(surah.nomor)}</span>{surah.namaLatin}</p>
-                <h2 className="text-lg text-black-600" id='artiTeks'>{surah.arti} - {surah.jumlahAyat} ayat - {surah.tempatTurun}</h2>
+                <h2 className="text-lg text-black-600" id='artiTeks'>{surah.arti} | {surah.jumlahAyat} ayat {surah.tempatTurun}</h2>
               <button onClick={() => playAudio(surah.audio['05'])}></button>
               </div>
             ))}
       </div>
       {/* Dalam Bar/kanan ujung */}
-      <div className="w-3/4 pt-15 h-screen overflow-auto  p-4">
+      <div className="w-3/4 pt-15 h-screen overflow-auto p-4">
         <div className="col-span-3 bg-transparent backdrop-blur-md border p-3 rounded-lg shadow-md text-center">
-          <h2 className="text-lg font-bold">Tentang informasi surah</h2>
+          <h2 className="text-lg font-bold font-amiri">About information surah</h2>
           <div className="p-4 bg-transparent border rounded-lg shadow">
             <h2 className="text-xl font-bold bg-bl">{dataSurah.find(surah => surah.nomor === selectedSurah)?.namaLatin}</h2>
             <p dangerouslySetInnerHTML={{ __html: dataSurah.find(surah => surah.nomor === selectedSurah)?.deskripsi }} className="text-black-800"></p>
           </div>
           {/* Dropdown Pilih Qari */}
-          <label className="block mt-2 font-semibold">Pilih Qari:</label>
+          <label className="block mt-2 text-xl font-semibold ">Select Qari:</label>
           <select className="p-2 border rounded mt-1" value={selectedQari} onChange={(e) => setSelectedQari(e.target.value)}>
             {Object.entries(dataSurah.find(surah => surah.nomor === selectedSurah)?.audioFull || {}).map(([key,]) => (
               <option key={key} value={key}>{getQariName(key)}</option>
@@ -203,20 +200,16 @@ function App() {
                       className="mt-2 p-2 text-2xl text-pink-400 rounded">
                       <FontAwesomeIcon icon={faPause} cursor={"pointer"} />
                     </button>
-                    {/* Tombol Open-Book */}
-                    <button className={`mt-2 p-2 text-2xl bg-pink-400 rounded ${bookmark === ayat.nomorAyat ? "bg-transparent" : "bg-transparent"}`}
-                      onClick={() => setBookmark([...bookmark, surah.nomorAyat])}><FontAwesomeIcon icon={faBookOpen} className="text-pink-400" cursor={"pointer"} />
-                    </button>
                   </div>
-                      {/* Tambahkan Tafsir */}
- 
                 </div>
-              ))
+              ))  
             }
           </div>
         ) : (
-          <div className='text-center'>
-            <h1>Select a Surah to view its Ayat</h1>
+          <div className="text-center">
+          <h1 className="text-3xl mt-15 m-5 p-10 animate__animated animate__fadeInDown">
+            Read and listen to the Quran anytime, anywhere.
+            </h1>
           </div>
         )
         }
