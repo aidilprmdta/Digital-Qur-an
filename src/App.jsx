@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faBookmark, faBookOpen, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faBookOpen, faSearch } from '@fortawesome/free-solid-svg-icons'
 import './App.css'
 
 function App() {
@@ -10,18 +10,20 @@ function App() {
   const [audioInstance, setAudioInstance] = useState(null)
   const [playing, setPlaying] = useState(null)
   const [pause, setPause] = useState(false)
-  const [bookmark, setBookmark] = useState([])
   const [deskripsi, setDeskripsi] = useState([])
   const [selectedQari, setSelectedQari] = useState("01")
   const ayatRefs = useRef({})
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch('https://equran.id/api/v2/surat')
-      .then(res => res.json())
-      .then(data => setDataSurah(data.data))
-      .catch(error => console.error('Data Error:', error))
-  }, [])
+    const fetchData = async () => {
+      const response = await fetch('https://equran.id/api/v2/surat');
+      const data = await response.json();
+      setDataSurah(data.data);
+    };
+    fetchData();
+  }, []);
+  
 
   const fetchAyat = (nomor) => {
     fetch(`https://equran.id/api/v2/surat/${nomor}`)
@@ -49,42 +51,49 @@ function App() {
   }, [ayat]);
 
   useEffect(() => {
-    localStorage.clear();
-    sessionStorage.clear();
-  }, []);
-  
-  useEffect(() => {
     if (selectedSurah && ayat.length > 0) {
       scrollToAyat(window.location.hash.replace('#', ''));
     }
   }, [ayat]);
-
+  
   const playAudio = (audioUrl, nomorAyat) => {
     if (!audioUrl) return;
-
+    
     if (audioInstance) {
       audioInstance.pause();
       audioInstance.currentTime = 0;
     }
-
+    
     const newAudio = new Audio(audioUrl);
+    newAudio.preload = "auto";
+    newAudio.load();
     setAudioInstance(newAudio);
-    setPlaying(nomorAyat);
-
+    newAudio.play();
+    
+    newAudio.onloadeddata = () => {
+      newAudio.play();
+    };
+    
     newAudio.play()
-      .then(() => {
-        newAudio.onended = () => setPlaying(null);
-        scrollToAyat(nomorAyat);
-      })
-      .catch((error) => console.error("Gagal memutar audio:", error));
+    .then(() => {
+      newAudio.onended = () => setPlaying(null);
+      scrollToAyat(nomorAyat);
+    })
+    .catch((error) => console.error("Gagal memutar audio:", error));
   };
-
+  
   const pauseAudio = () => {
     if (audioInstance) {
       audioInstance.pause();
       setPause(true);
     }
   };
+  
+  useEffect(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  }, []);
+
   const getQariName = (key) => {
     const qariList = {
       "01": "Abdullah Al-Juhany",
