@@ -37,9 +37,9 @@ Digital-Qur-an/
 ├── package.json
 └── README.md
 ```
-📸 Tampilan(https://github.com/aidilprmdta/Digital-Qur-an/blob/main/Image.png?raw=true)
+📸 Tampilan(https://github.com/aidilprmdta/Digital-Qur-an/blob/main/image.png?raw=true)
 
-📦 Cara Menjalankan Proyek
+##📦 Cara Menjalankan Proyek
 1. Clone repositori ini:
 ```
 git clone https://github.com/aidilprmdta/Digital-Qur-an.git
@@ -57,7 +57,7 @@ npm run dev
 ```
 http://localhost:5173
 ```
-🤝 Kontribusi
+##🤝 Kontribusi
 Kontribusi sangat terbuka! Kamu bisa:
 
 Membuat pull request
@@ -66,7 +66,7 @@ Membuka issue untuk bug atau fitur baru
 
 Fork dan kembangkan sendiri
 
-📜 Lisensi
+##📜 Lisensi
 Proyek ini dilisensikan di bawah MIT License.
 
 Dibuat dengan ❤️ oleh Aidil Pramadita Putra
