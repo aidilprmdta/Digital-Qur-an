@@ -37,7 +37,7 @@ Digital-Qur-an/
 ├── package.json
 └── README.md
 ```
-📸 Tampilan
+📸 Tampilan(https://github.com/aidilprmdta/Digital-Qur-an/blob/main/Image.png?raw=true)
 
 📦 Cara Menjalankan Proyek
 1. Clone repositori ini:
