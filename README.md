@@ -37,6 +37,7 @@ Digital-Qur-an/
 ├── package.json
 └── README.md
 ```
+## 📸 Tampilan Website
 ![📸 Tampilan](https://github.com/aidilprmdta/Digital-Qur-an/blob/main/image.png?raw=true)
 
 ## 📦 Cara Menjalankan Proyek
