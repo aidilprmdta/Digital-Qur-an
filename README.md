@@ -1,47 +1,47 @@
 # 📖 Digital Qur'an
 
-Digital Qur'an adalah aplikasi web yang menampilkan daftar surat dalam Al-Qur'an beserta isi surat dan terjemahannya. Aplikasi ini dibangun menggunakan **React.js**, **Tailwind CSS**, dan konsumsi API dari [equran.id](https://equran.id).
+Digital Qur'an is a web application that displays a list of surahs in the Qur'an along with the contents of the surah and its translation. This application is built using **React.js**, **Tailwind CSS**, and API consumption from [equran.id](https://equran.id).
 
-## 🚀 Fitur Utama
+## 🚀 Main Features
 
-- Menampilkan semua surat Al-Qur'an (114 surat)
-- Melihat detail surat, ayat, dan terjemahan
-- Navigasi antar surat secara dinamis
-- Desain responsif dan modern menggunakan Tailwind CSS
-- Pemisahan komponen React untuk efisiensi dan keterbacaan kode
+- Displays all surahs of the Quran (114 surahs)
+- View surah, verse, and translation details
+- Dynamic navigation between surahs
+- Responsive and modern design using Tailwind CSS
+- React component separation for efficiency and code readability
 
-## 🛠️ Teknologi yang Digunakan
+## 🛠️ Technologies Used
 
-- **React.js** – Library JavaScript untuk membangun antarmuka pengguna
+- **React.js** – JavaScript library for building user interfaces
 - **Tailwind CSS** – Utility-first CSS framework
-- **Axios** – Untuk pengambilan data dari API
-- **equran.id API** – Sumber data Al-Qur'an dan terjemahan
+- **Axios** – For retrieving data from API
+- **equran.id API** – Source of Quran data and translations
 
-## 📂 Struktur Proyek
+## 📂 Project Structure
 
 ```bash
 Digital-Qur-an/
 ├── public/
 ├── src/
-│   ├── components/
-│   │   ├── Header.jsx
-│   │   ├── Footer.jsx
-│   │   └── SurahCard.jsx
-│   ├── pages/
-│   │   ├── Home.jsx
-│   │   └── SurahDetail.jsx
-│   ├── App.jsx
-│   ├── index.js
-│   └── App.css
+│ ├── components/
+│ │ ├── Header.jsx
+│ │ ├── Footer.jsx
+│ │ └── SurahCard.jsx
+│ ├── pages/
+│ │ ├── Home.jsx
+│ │ └── SurahDetail.jsx
+│ ├── App.jsx
+│ ├── index.js
+│ └── App.css
 ├── tailwind.config.js
 ├── package.json
 └── README.md
 ```
-## 📸 Tampilan Website
-![📸 Tampilan](https://github.com/aidilprmdta/Digital-Qur-an/blob/main/image.png?raw=true)
+## 📸 Website Appearance
+![📸 View](https://github.com/aidilprmdta/Digital-Qur-an/blob/main/image.png?raw=true)
 
-## 📦 Cara Menjalankan Proyek
-1. Clone repositori ini:
+## 📦 How to Run the Project
+1. Clone this repository:
 ```
 git clone https://github.com/aidilprmdta/Digital-Qur-an.git
 cd Digital-Qur-an
@@ -50,24 +50,24 @@ cd Digital-Qur-an
 ```
 npm install
 ```
-3. Jalankan aplikasi:
+3. Run the application:
 ```
 npm run dev
 ```
-4. Buka di browser:
+4. Open in browser:
 ```
 http://localhost:5173
 ```
-## 🤝 Kontribusi
-Kontribusi sangat terbuka! Kamu bisa:
+## 🤝 Contributions
+Contributions are very welcome! You can:
 
-Membuat pull request
+Make a pull request
 
-Membuka issue untuk bug atau fitur baru
+Open an issue for a bug or new feature
 
-Fork dan kembangkan sendiri
+Fork and develop it yourself
 
-## 📜 Lisensi
-Proyek ini dilisensikan di bawah MIT License.
+## 📜 License
+This project is licensed under the MIT License.
 
-Dibuat dengan ❤️ oleh Aidil Pramadita Putra
+Made with ❤️ by Aidil Pramadita Putra
